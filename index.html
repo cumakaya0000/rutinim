@@ -14,12 +14,12 @@
   <main class="app-shell">
     <header class="topbar">
       <a class="brand" href="#" aria-label="Rutinim ana sayfa"><span class="brand-mark">r</span><span>rutinim</span></a>
-      <div class="account-area"><span id="sync-status" class="sync-status">Bu cihazda kayıtlı</span><button id="theme-toggle" class="account-button theme-toggle" type="button" aria-label="Açık temaya geç">☀️</button><button id="signup-open-button" class="account-button signup-open-button" type="button">Hesap oluştur</button><button id="account-button" class="account-button" type="button">Giriş yap</button></div>
+      <div class="account-area"><span id="sync-status" class="sync-status" hidden>Bu cihazda kayıtlı</span><button id="theme-toggle" class="account-button theme-toggle" type="button" aria-label="Açık temaya geç" hidden>☀️</button><button id="signup-open-button" class="account-button signup-open-button" type="button">Hesap oluştur</button><button id="account-button" class="account-button" type="button">Giriş yap</button></div>
     </header>
 
-    <section class="welcome"><div class="date-card"><span class="date-icon">✳</span><span id="date-display"></span><span class="date-divider" aria-hidden="true"></span><time id="time-display" class="date-time" aria-label="Şu anki saat"></time></div></section>
+    <section class="welcome" hidden><div class="date-card"><span class="date-icon">✳</span><span id="date-display"></span><span class="date-divider" aria-hidden="true"></span><time id="time-display" class="date-time" aria-label="Şu anki saat"></time></div></section>
 
-    <section class="dashboard" aria-label="Günlük rutinlerin">
+    <section class="dashboard" aria-label="Günlük rutinlerin" hidden>
       <div class="section-heading"><div><p class="eyebrow">GÜNLÜK RİTMİN</p><h2 id="routines-heading">Bugünün rutinleri</h2></div><button id="add-button" class="add-button" type="button"><span>＋</span> Rutin ekle</button></div>
       <section class="week-card" aria-label="Haftalık rutin planı">
         <div class="week-head"><div><p class="eyebrow">HAFTALIK PLAN</p><strong id="week-range"></strong></div><div class="week-nav"><button id="previous-day" class="week-nav-button" type="button" aria-label="Önceki gün">‹</button><button id="go-today" class="today-button" type="button">Bugün</button><button id="next-day" class="week-nav-button" type="button" aria-label="Sonraki gün">›</button></div></div>
@@ -33,7 +33,7 @@
       <div id="empty-state" class="empty-state" hidden><div class="empty-sparkle">✳</div><h3>Rutinlerini oluşturmaya başla</h3><p>Her gün tekrarlamak istediğin küçük bir şey ekleyebilirsin.</p><button class="text-button" id="empty-add" type="button">İlk rutinini ekle <span>→</span></button></div>
     </section>
 
-    <footer><span>Bugün kendin için ne yaptın?</span><span class="footer-dot">●</span><span>Yarın yeni bir gün.</span></footer>
+    <footer hidden><span>Bugün kendin için ne yaptın?</span><span class="footer-dot">●</span><span>Yarın yeni bir gün.</span></footer>
   </main>
 
   <dialog id="routine-dialog" class="modal routine-modal">
