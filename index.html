@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e7efe5">
+  <title>Rutinim — Her gün küçük bir adım</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Rutinim ana sayfa"><span class="brand-mark">r</span><span>rutinim</span></a>
+      <div class="account-area"><span id="sync-status" class="sync-status">Bu cihazda kayıtlı</span><button id="theme-toggle" class="account-button theme-toggle" type="button" aria-label="Açık temaya geç">☀️</button><button id="signup-open-button" class="account-button signup-open-button" type="button">Hesap oluştur</button><button id="account-button" class="account-button" type="button">Giriş yap</button></div>
+    </header>
+
+    <section class="welcome"><div class="date-card"><span class="date-icon">✳</span><span id="date-display"></span><span class="date-divider" aria-hidden="true"></span><time id="time-display" class="date-time" aria-label="Şu anki saat"></time></div></section>
+
+    <section class="dashboard" aria-label="Günlük rutinlerin">
+      <div class="section-heading"><div><p class="eyebrow">GÜNLÜK RİTMİN</p><h2 id="routines-heading">Bugünün rutinleri</h2></div><button id="add-button" class="add-button" type="button"><span>＋</span> Rutin ekle</button></div>
+      <section class="week-card" aria-label="Haftalık rutin planı">
+        <div class="week-head"><div><p class="eyebrow">HAFTALIK PLAN</p><strong id="week-range"></strong></div><div class="week-nav"><button id="previous-day" class="week-nav-button" type="button" aria-label="Önceki gün">‹</button><button id="go-today" class="today-button" type="button">Bugün</button><button id="next-day" class="week-nav-button" type="button" aria-label="Sonraki gün">›</button></div></div>
+        <div id="week-days" class="week-days"></div>
+        <aside class="motivation-card" aria-label="Günün motivasyon sözü"><span class="motivation-icon" aria-hidden="true">✦</span><p id="motivation-text">Küçük adımlar, zamanla büyük değişimler yaratır.</p></aside>
+        <div class="week-summary"><span>Bu hafta tamamlanan</span><strong><b id="week-completed">0</b> / <span id="week-total">0</span></strong></div>
+        <div class="progress-track week-progress-track"><div id="week-progress-bar" class="progress-bar"></div></div>
+      </section>
+      <div class="progress-card"><div class="progress-copy"><div><strong id="progress-title">Güzel bir başlangıç yapalım</strong><span id="progress-subtitle">Bir rutin seç ve bugünü kendin için tamamla.</span></div><div class="progress-count"><b id="completed-count">0</b><span> / <span id="total-count">0</span></span></div></div><div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div></div>
+      <div id="routine-list" class="routine-list"></div>
+      <div id="empty-state" class="empty-state" hidden><div class="empty-sparkle">✳</div><h3>Rutinlerini oluşturmaya başla</h3><p>Her gün tekrarlamak istediğin küçük bir şey ekleyebilirsin.</p><button class="text-button" id="empty-add" type="button">İlk rutinini ekle <span>→</span></button></div>
+    </section>
+
+    <footer><span>Bugün kendin için ne yaptın?</span><span class="footer-dot">●</span><span>Yarın yeni bir gün.</span></footer>
+  </main>
+
+  <dialog id="routine-dialog" class="modal routine-modal">
+    <form id="routine-form" method="dialog">
+      <div class="modal-head"><div><p class="eyebrow">RUTİNİNİ KİŞİSELLEŞTİR</p><h2 id="routine-modal-title">Rutin ekle</h2></div><button class="icon-button" type="button" data-close aria-label="Kapat">×</button></div>
+      <div class="form-grid">
+        <div class="form-span"><label class="field-label" for="routine-name">Rutin adı</label><input id="routine-name" class="text-input" maxlength="48" placeholder="Örn. Kitap oku" required></div>
+        <div class="form-span"><label class="field-label" for="routine-description">Kısa açıklama <span>(isteğe bağlı)</span></label><textarea id="routine-description" class="text-input text-area" maxlength="140" placeholder="Bu rutin için kendine küçük bir not bırak"></textarea></div>
+        <div><label class="field-label" for="routine-category">Kategori</label><select id="routine-category" class="text-input"><option>Kişisel</option><option>Sağlık</option><option>Öğrenme</option><option>Spor</option><option>Ev</option><option>Diğer</option></select></div>
+        <div><label class="field-label" for="routine-time">Hatırlatma saati <span>(isteğe bağlı)</span></label><input id="routine-time" class="text-input" type="time"></div>
+        <div><label class="field-label" for="routine-target">Günlük hedef <span>(isteğe bağlı)</span></label><input id="routine-target" class="text-input" type="number" min="1" max="9999" placeholder="Örn. 20"></div>
+        <div><label class="field-label" for="routine-unit">Hedef birimi</label><select id="routine-unit" class="text-input"><option value="dk">dakika</option><option value="sayfa">sayfa</option><option value="bardak">bardak</option><option value="adet">adet</option><option value="km">kilometre</option><option value="kez">kez</option></select></div>
+        <fieldset class="form-span choice-field"><legend class="field-label">Tekrar günleri</legend><div class="day-choices"><label><input type="checkbox" name="routine-day" value="1" checked><span>Pzt</span></label><label><input type="checkbox" name="routine-day" value="2" checked><span>Sal</span></label><label><input type="checkbox" name="routine-day" value="3" checked><span>Çar</span></label><label><input type="checkbox" name="routine-day" value="4" checked><span>Per</span></label><label><input type="checkbox" name="routine-day" value="5" checked><span>Cum</span></label><label><input type="checkbox" name="routine-day" value="6" checked><span>Cmt</span></label><label><input type="checkbox" name="routine-day" value="0" checked><span>Paz</span></label></div></fieldset>
+        <fieldset class="form-span choice-field"><legend class="field-label">Rutin rengi</legend><div class="color-choices"><label><input type="radio" name="routine-color" value="green" checked><span class="color-swatch swatch-green" aria-label="Yeşil"></span></label><label><input type="radio" name="routine-color" value="blue"><span class="color-swatch swatch-blue" aria-label="Mavi"></span></label><label><input type="radio" name="routine-color" value="orange"><span class="color-swatch swatch-orange" aria-label="Turuncu"></span></label><label><input type="radio" name="routine-color" value="rose"><span class="color-swatch swatch-rose" aria-label="Gül kurusu"></span></label><label><input type="radio" name="routine-color" value="purple"><span class="color-swatch swatch-purple" aria-label="Mor"></span></label></div></fieldset>
+      </div>
+      <div class="modal-actions"><button class="quiet-button" type="button" data-close>Vazgeç</button><button class="primary-button" type="submit">Kaydet</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="account-dialog" class="modal account-modal">
+    <form id="account-form" method="dialog"><div class="modal-head"><div><p class="eyebrow">CİHAZLAR ARASI EŞİTLEME</p><h2 id="account-title">Hesabına giriş yap</h2></div><button class="icon-button" type="button" data-close aria-label="Kapat">×</button></div>
+      <p class="modal-description">Aynı hesapla telefonundan ve bilgisayarından giriş yap; rutinlerin ve günlük tiklerin eşitlensin.</p>
+      <label class="field-label" for="email">E-posta</label><input id="email" class="text-input" type="email" autocomplete="email" required placeholder="sen@ornek.com">
+      <label class="field-label" for="password">Şifre</label><input id="password" class="text-input" type="password" autocomplete="current-password" minlength="6" required placeholder="En az 6 karakter">
+      <p id="account-message" class="form-message" role="status"></p><div class="modal-actions account-actions"><button id="signup-button" class="quiet-button" type="button">Hesap oluştur</button><button class="primary-button" type="submit">Giriş yap</button></div>
+    </form>
+  </dialog>
+  <dialog id="delete-dialog" class="modal delete-modal" aria-labelledby="delete-title">
+    <div class="modal-head"><div><p class="eyebrow">RUTİNİ SİL</p><h2 id="delete-title">Emin misin?</h2></div><button class="icon-button" type="button" data-delete-cancel aria-label="Kapat">×</button></div>
+    <p class="modal-description"><strong id="delete-routine-name"></strong> rutinini ve bu rutine ait tamamlanma kayıtlarını silmek istiyor musun?</p>
+    <div class="modal-actions"><button id="delete-cancel" class="quiet-button" type="button">Vazgeç</button><button id="delete-confirm" class="danger-button" type="button">Rutini sil</button></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
