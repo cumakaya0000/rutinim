@@ -4,9 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#e7efe5">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://xuvuqulsqrhefksipiyp.supabase.co; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>Rutinim — Her gün küçük bir adım</title>
   <link rel="stylesheet" href="./styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.js" integrity="sha384-uteMfOloLDGt042uDz+xHGF3ym63/WQ6rFq7murQRG8Ih7QrXGEGNtWd8688sb4O" crossorigin="anonymous"></script>
   <script defer src="./app.js"></script>
 </head>
 <body>
@@ -25,9 +26,9 @@
         <div id="week-days" class="week-days"></div>
         <aside class="motivation-card" aria-label="Günün motivasyon sözü"><span class="motivation-icon" aria-hidden="true">✦</span><p id="motivation-text">Küçük adımlar, zamanla büyük değişimler yaratır.</p></aside>
         <div class="week-summary"><span>Bu hafta tamamlanan</span><strong><b id="week-completed">0</b> / <span id="week-total">0</span></strong></div>
-        <div class="progress-track week-progress-track"><div id="week-progress-bar" class="progress-bar"></div></div>
+        <progress id="week-progress-bar" class="progress-bar week-progress-bar" max="100" value="0" aria-label="Haftalık ilerleme"></progress>
       </section>
-      <div class="progress-card"><div class="progress-copy"><div><strong id="progress-title">Güzel bir başlangıç yapalım</strong><span id="progress-subtitle">Bir rutin seç ve bugünü kendin için tamamla.</span></div><div class="progress-count"><b id="completed-count">0</b><span> / <span id="total-count">0</span></span></div></div><div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div></div>
+      <div class="progress-card"><div class="progress-copy"><div><strong id="progress-title">Güzel bir başlangıç yapalım</strong><span id="progress-subtitle">Bir rutin seç ve bugünü kendin için tamamla.</span></div><div class="progress-count"><b id="completed-count">0</b><span> / <span id="total-count">0</span></span></div></div><progress id="progress-bar" class="progress-bar daily-progress-bar" max="100" value="0" aria-label="Günlük ilerleme"></progress></div>
       <div id="routine-list" class="routine-list"></div>
       <div id="empty-state" class="empty-state" hidden><div class="empty-sparkle">✳</div><h3>Rutinlerini oluşturmaya başla</h3><p>Her gün tekrarlamak istediğin küçük bir şey ekleyebilirsin.</p><button class="text-button" id="empty-add" type="button">İlk rutinini ekle <span>→</span></button></div>
     </section>
@@ -56,8 +57,8 @@
     <form id="account-form" method="dialog"><div class="modal-head"><div><p class="eyebrow">CİHAZLAR ARASI EŞİTLEME</p><h2 id="account-title">Hesabına giriş yap</h2></div><button class="icon-button" type="button" data-close aria-label="Kapat">×</button></div>
       <p class="modal-description">Aynı hesapla telefonundan ve bilgisayarından giriş yap; rutinlerin ve günlük tiklerin eşitlensin.</p>
       <label class="field-label" for="email">E-posta</label><input id="email" class="text-input" type="email" autocomplete="email" required placeholder="sen@ornek.com">
-      <label class="field-label" for="password">Şifre</label><input id="password" class="text-input" type="password" autocomplete="current-password" minlength="6" required placeholder="En az 6 karakter">
-      <p id="account-message" class="form-message" role="status"></p><div class="modal-actions account-actions"><button id="signup-button" class="quiet-button" type="button">Hesap oluştur</button><button class="primary-button" type="submit">Giriş yap</button></div>
+      <label class="field-label" for="password">Şifre</label><input id="password" class="text-input" type="password" autocomplete="current-password" minlength="8" required placeholder="En az 8 karakter">
+      <p id="account-message" class="form-message" role="status"></p><div class="modal-actions account-actions"><button id="signup-button" class="quiet-button" type="button">Hesap oluştur</button><button class="primary-button" type="submit" formnovalidate>Giriş yap</button></div>
     </form>
   </dialog>
   <dialog id="delete-dialog" class="modal delete-modal" aria-labelledby="delete-title">
